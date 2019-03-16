@@ -5,54 +5,26 @@
   
 <mapper namespace="edu.eci.cvds.sampleprj.dao.mybatis.mappers.TipoItemMapper">
 
-<select parameterType="map" id="consultarTipoItems" resultMap="ClienteResult">
-	select 
-	    it.id AS idItem,
-	    it.nombre AS nombreItem ,
-	    it.descripcion AS itemDescripcion ,
-	    it.fechalanzamiento ,
-	    it.tarifaxdia ,
-	    it.formatorenta ,
-	    it.genero ,        
+<select parameterType="map" id="getTiposItems" resultMap="TipoItemResult">
+	select        
 	    ti.id AS idTipoItem ,
 	    ti.descripcion AS tipoItemDescripcion 
-    FROM VI_TIPOITEM as ti 
-	    left join VI_ITEMS as it on idItem=idTipoItem 
+    FROM VI_TIPOITEM AS ti 
+</select>
+
+<select parameterType="map" id="getTipoItem" resultMap="TipoItemResult">
+	select        
+	    ti.id AS idTipoItem ,
+	    ti.descripcion AS tipoItemDescripcion 
+    FROM VI_TIPOITEM AS ti 
+    	WHERE ti.id = #{tiid}
 </select>
 
 
-    
-<resultMap type='Cliente' id='ClienteResult'>
-    <id property='documento' column='documento'/>
-    <result property='nombre' column='nombreCliente'/>
-    <result property='telefono' column='telefono'/>  
-    <result property='direccion' column='direccion'/>
-    <result property='email' column='email'/>
-    <result property='vetado' column='vetado'/>      
-    <collection property='rentados' ofType='ItemRentado' resultMap='ItemRentadoResult' ></collection>
-</resultMap>	
-<resultMap type='ItemRentado' id='ItemRentadoResult'>
-    <id property='id' column='idItemRentado'/>
-    <result property='fechainiciorenta' column='fechainiciorenta'/>  
-    <result property='fechafinrenta' column='fechafinrenta'/>  
-    <association property="item" javaType="Item" resultMap = 'ItemResult' ></association>    
-</resultMap>
-<resultMap type='Item' id='ItemResult'>
-    <id property='id' column='idItem'/>
-    <result property='nombre' column='nombreItem'/>
-    <result property='descripcion' column='itemDescripcion'/>  
-    <result property='fechaLanzamiento' column='fechaLanzamiento'/>
-    <result property='tarifaxDia' column='tarifaxDia'/>
-    <result property='formatoRenta' column='formatoRenta'/>
-    <result property='genero' column='genero'/>   
-    <association property='tipo' javaType='TipoItem' resultMap='TipoItemResult' ></association>
-</resultMap>
+
 <resultMap type='TipoItem' id='TipoItemResult'>
     <id property='id' column='idTipoItem'/>
     <result property='descripcion' column='tipoItemDescripcion'/>      
 </resultMap>
-
-
-
-                
+           
 </mapper>

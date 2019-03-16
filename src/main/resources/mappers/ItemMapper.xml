@@ -13,11 +13,11 @@
 	    it.fechalanzamiento ,
 	    it.tarifaxdia ,
 	    it.formatorenta ,
-	    it.genero ,        
+	    it.genero,        
 	    ti.id AS idTipoItem ,
 	    ti.descripcion AS tipoItemDescripcion 
     FROM VI_ITEMS as it 
-	    left join VI_TIPOITEM as ti on it.TIPOITEM_id=ti.id
+	    left join VI_TIPOITEM as ti on it.TIPOITEM_id=ti.id 
 </select>
 <select parameterType="map" id="consultarItem" resultMap="ItemResult">
 	select 
@@ -34,41 +34,23 @@
 	    left join VI_TIPOITEM as ti on it.TIPOITEM_id=ti.id 
 	    WHERE it.id = #{iid}
 </select>
-<insert id="agregarItem" parameterType = "map">
+<insert id="insertarItem" parameterType = "map">
 
-	INSERT INTO VI_ITEMS (nombreItem,itemDescripcion,i.fechalanzamiento,i.tarifaxdia,i.formatorenta,i.genero VALUES (#{ino},#{idesc},#{ifl},#{ita},#{ift},#{ige})) 
+	INSERT INTO VI_ITEMS (id,nombre,descripcion,fechaLanzamiento,tarifaxDia,formatoRenta,genero,TIPOITEM_id) VALUES (#{iitem.id},#{iitem.nombre},#{iitem.descripcion},#{iitem.fechaLanzamiento},#{iitem.tarifaxDia},#{iitem.formatoRenta},#{iitem.genero},#{iitem.tipo.id}) 
 
 </insert>
-<resultMap type='Cliente' id='ClienteResult'>
-    <id property='documento' column='documento'/>
-    <result property='nombre' column='nombreCliente'/>
-    <result property='telefono' column='telefono'/>  
-    <result property='direccion' column='direccion'/>
-    <result property='email' column='email'/>
-    <result property='vetado' column='vetado'/>      
-    <collection property='rentados' ofType='ItemRentado' resultMap='ItemRentadoResult' ></collection>
-</resultMap>	
-<resultMap type='ItemRentado' id='ItemRentadoResult'>
-    <id property='id' column='idItemRentado'/>
-    <result property='fechainiciorenta' column='fechainiciorenta'/>  
-    <result property='fechafinrenta' column='fechafinrenta'/>  
-    <association property="item" javaType="Item" resultMap = 'ItemResult' ></association>    
-</resultMap>
+
+
 <resultMap type='Item' id='ItemResult'>
     <id property='id' column='idItem'/>
     <result property='nombre' column='nombreItem'/>
-    <result property='descripcion' column='itemDescripcion'/>  
+    <result property='descripcion' column='descripcion'/>  
     <result property='fechaLanzamiento' column='fechaLanzamiento'/>
     <result property='tarifaxDia' column='tarifaxDia'/>
     <result property='formatoRenta' column='formatoRenta'/>
     <result property='genero' column='genero'/>   
-    <association property='tipo' javaType='TipoItem' resultMap='TipoItemResult' ></association>
+    <association property='tipo' javaType='TipoItem' resultMap = 'edu.eci.cvds.sampleprj.dao.mybatis.mappers.TipoItemMapper.TipoItemResult'></association>
 </resultMap>
-<resultMap type='TipoItem' id='TipoItemResult'>
-    <id property='id' column='idTipoItem'/>
-    <result property='descripcion' column='tipoItemDescripcion'/>      
-</resultMap>
-
 
     
     

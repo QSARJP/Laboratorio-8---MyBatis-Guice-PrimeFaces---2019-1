@@ -28,6 +28,8 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import edu.eci.cvds.sampleprj.dao.mybatis.mappers.ClienteMapper;
 import edu.eci.cvds.sampleprj.dao.mybatis.mappers.ItemMapper;
+import edu.eci.cvds.sampleprj.dao.mybatis.mappers.ItemRentadoMapper;
+import edu.eci.cvds.sampleprj.dao.mybatis.mappers.TipoItemMapper;
 
 /**
  *
@@ -65,15 +67,27 @@ public class MyBatisExample {
 
         SqlSession sqlss = sessionfact.openSession();
 
+       
+        ClienteMapper cm=sqlss.getMapper(ClienteMapper.class);
+//        System.out.println(cm.consultarClientes());
+//        System.out.println(cm.consultarCliente(123456));
         
-        //Crear el mapper y usarlo: 
-        //ClienteMapper cm=sqlss.getMapper(ClienteMapper.class)
-        //cm...
-        //ClienteMapper cm=sqlss.getMapper(ClienteMapper.class);
-        //System.out.println(cm.consultarCliente(123456));
+//        cm.agregarItemRentadoACliente(123456, 20, new Date(10022019), new Date(10032019));
         
         ItemMapper im=sqlss.getMapper(ItemMapper.class);
-        System.out.println(im.consultarItems());
+//        System.out.println(im.consultarItems());
+//        System.out.println(im.consultarItem(1));
+//        im.insertarItem(new Item(new TipoItem(1, "VideJuego"), 40, "insertprueba1", "The best of the best", new Date(10022019), 10000, "Digital", "prueba1"));
+//        im.insertarItem(new Item(new TipoItem(1, "VideJuego"), 80, "insertprueba2", "The best of the best2", new Date(10022019), 20000, "Digital", "prueba2"));
+       
+        
+        TipoItemMapper tm=sqlss.getMapper(TipoItemMapper.class);
+//        System.out.println(tm.getTiposItems());
+//        System.out.println(tm.getTipoItem(1));
+////        
+        
+        ItemRentadoMapper irm=sqlss.getMapper(ItemRentadoMapper.class);
+//        System.out.println(irm.getItemsRentados());
         
         
         sqlss.commit();
@@ -84,6 +98,7 @@ public class MyBatisExample {
         
         
     }
+
 
 
 }
