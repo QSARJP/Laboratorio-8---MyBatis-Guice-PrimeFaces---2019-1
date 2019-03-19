@@ -58,6 +58,29 @@
 	     	WHERE c.documento = #{idcli} 
 </select>
 
+<select parameterType="map" id="consultarItemsClientes" resultMap="ItemResult">
+	select 
+	    c.nombre AS nombreCliente,
+	    c.documento,
+	    c.telefono,
+	    c.direccion,
+	    c.email,
+	    c.vetado,
+	    ir.id AS idItemRentado ,
+	    ir.fechainiciorenta ,
+	    ir.fechafinrenta ,
+	    i.id AS idItem,
+	    i.nombre AS nombreItem ,
+	    i.descripcion AS itemDescripcion ,
+	    i.fechalanzamiento ,
+	    i.tarifaxdia ,
+	    i.formatorenta ,
+	    i.genero 
+    FROM VI_CLIENTES as c 
+	    left join VI_ITEMRENTADO as ir on c.documento=ir.CLIENTES_documento 
+	    left join VI_ITEMS as i on ir.ITEMS_id=i.id 
+</select>
+
 <insert id=agregarItemRentadoACliente parameterType = "map">
 
 	INSERT INTO VI_ITEMRENTADO (CLIENTES_documento,ITEMS_id,fechainiciorenta,fechafinrenta) VALUES (#{idcli},#{idit},#{irfi},#{irff})

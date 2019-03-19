@@ -34,6 +34,24 @@
 	    left join VI_TIPOITEM as ti on it.TIPOITEM_id=ti.id 
 	    WHERE it.id = #{iid}
 </select>
+
+<select parameterType="map" id="consultarItemsDisponibles" resultMap="ItemResult">
+	select 
+	    ir.id AS idItemRentado ,
+	    ir.fechainiciorenta ,
+	    ir.fechafinrenta ,
+	    i.id AS idItem,
+	    i.nombre AS nombreItem ,
+	    i.descripcion AS itemDescripcion ,
+	    i.fechalanzamiento ,
+	    i.tarifaxdia ,
+	    i.formatorenta ,
+	    i.genero 
+    FROM VI_ITEMRENTADO as ir 
+	    right join VI_ITEMS as i on ir.ITEMS_id=i.id 
+	    where ir.ITEMS_id is null
+</select>
+
 <insert id="insertarItem" parameterType = "map">
 
 	INSERT INTO VI_ITEMS (id,nombre,descripcion,fechaLanzamiento,tarifaxDia,formatoRenta,genero,TIPOITEM_id) VALUES (#{iitem.id},#{iitem.nombre},#{iitem.descripcion},#{iitem.fechaLanzamiento},#{iitem.tarifaxDia},#{iitem.formatoRenta},#{iitem.genero},#{iitem.tipo.id}) 

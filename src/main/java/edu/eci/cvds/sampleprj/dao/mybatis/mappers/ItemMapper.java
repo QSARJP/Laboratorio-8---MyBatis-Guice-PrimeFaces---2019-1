@@ -14,7 +14,11 @@ import edu.eci.cvds.samples.entities.Item;
 public interface ItemMapper {
     
     
-    public List<Item> consultarItems();        
+    public List<Item> consultarItems();  
+    
+    public List<Item> consultarItemsClientes();
+    
+    public List<Item> consultarItemsDisponibles();
     
     public Item consultarItem(@Param("iid")int id);
     
