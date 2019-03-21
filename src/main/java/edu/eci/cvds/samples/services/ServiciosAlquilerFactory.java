@@ -10,6 +10,7 @@ import edu.eci.cvds.sampleprj.dao.mybatis.MyBATISTipoItemDAO;
 import edu.eci.cvds.samples.services.impl.ServiciosAlquilerImpl;
 import edu.eci.cvds.samples.services.impl.ServiciosAlquilerItemsStub;
 
+import org.mybatis.guice.datasource.helper.JdbcHelper;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.mybatis.guice.XMLMyBatisModule;
@@ -28,13 +29,13 @@ public class ServiciosAlquilerFactory {
 	       return createInjector(new XMLMyBatisModule() {
 	           @Override
 	           protected void initialize() {
-	               setEnvironmentId(env);
-	               setClassPathResource(pathResource);
+	        	   install(JdbcHelper.MySQL);
+	               setClassPathResource("mybatis-config.xml");
 	               bind(ItemDAO.class).to(MyBATISItemDAO.class);
 	               bind(ClienteDAO.class).to(MyBATISClienteDAO.class);
 	               bind(TipoItemDAO.class).to(MyBATISTipoItemDAO.class);
 	               bind(ServiciosAlquiler.class).to(ServiciosAlquilerImpl.class);
-	               bind(ServiciosAlquiler.class).to(ServiciosAlquilerItemsStub.class);
+	        
 	           }
 	       });
 	   }

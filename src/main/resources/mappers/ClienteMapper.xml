@@ -81,7 +81,9 @@
 	    left join VI_ITEMS as i on ir.ITEMS_id=i.id 
 </select>
 
-<insert id=agregarItemRentadoACliente parameterType = "map">
+
+
+<insert id="agregarItemRentadoACliente" parameterType = "map">
 
 	INSERT INTO VI_ITEMRENTADO (CLIENTES_documento,ITEMS_id,fechainiciorenta,fechafinrenta) VALUES (#{idcli},#{idit},#{irfi},#{irff})
 

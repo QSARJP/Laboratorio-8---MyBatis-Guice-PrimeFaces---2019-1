@@ -1,52 +1,56 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3c.org/1999/xhtml"
-     xmlns:h="http://xmlns.jcp.org/jsf/html"
-     xmlns:p="http://primefaces.org/ui" 
-     xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h:head><title>Tienda de Alquiler</title></h:head>
-  <h:body>
-      <h:form id="Clientes">
-          <p:layout style="min-width:800px;min-height:800px;">
-              <p:layoutUnit resizable="true" position="center" header="Lista de Clientes registrados">
-                  <p:dataTable rowIndexVar="row" id="TablaClientes" var="Cliente"  value="#{AlquilerItems.consultarClientes}" 
-                               selection="#{AlquilerItems.selecCliente}"  selectionMode="single" rowKey="#{Cliente.documento}" style="margin-bottom:0">
-                      <p:column headerText="Nombre">
-                          <h:outputText value="#{Cliente.nombre}"/>
-                      </p:column>
-                      <p:column headerText="Telefono">
-                          <h:outputText value="#{Cliente.telefono}"/>
-                      </p:column>
-                      <p:column headerText="Documento">
-                          <h:outputText value="#{Cliente.documento}"/>
-                      </p:column>
-                  </p:dataTable>
-                  <p:commandButton type="submit" value="Seleccionar cliente"  update="Clientes" action="RegistroClienteItem" />
-                  <br/>
-              </p:layoutUnit>
-              <p:layoutUnit position="west" header="Registrar nuevo Cliente" size="400" resizable="true">
-                  <p:panel id="panel" header="Cliente nuevo">
-                      <h:panelGrid columns="2" cellpadding="5">
-                          <p:outputLabel for="nombre" value="Nombre:" />
-                          <p:inputText  id="nombre" value="#{AlquilerItems.nuevoCliente.nombre}" label="Nombre"></p:inputText>
+ <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head></h:head>
 
-                          <p:outputLabel for="documento" value="Documento:" />
-                          <p:inputText  id="documento" value="#{AlquilerItems.nuevoCliente.documento}" label="Dcumento"></p:inputText>
+    <h:body>
+        <h:form id="RegistroAlquiler">
+            <p:layout>
+                <p:layoutUnit position="west" resizable="true" size="700">
+                    <h1>Cliente : #{AlquilerItems.cliente.nombre}</h1>
+                    <p:dataTable id="ItemsRentados" var="itemRentado" value="#{AlquilerItems.cliente.rentados}">
+                        <f:facet name="header">
+                            Items Rentados
+                        </f:facet>
+                        <p:column headerText="Item">
+                            <h:outputText value="#{itemRentado.item.nombre}"/>
+                        </p:column>
+                        <p:column headerText="Multa">
+                            <h:outputText value="#{AlquilerItems.consultarMulta(itemRentado.item.id, AlquilerItems.fechaActual)}">
+                                <f:convertNumber currencySymbol="$" type="currency"/>
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>
+                </p:layoutUnit>
+                    
+                <p:layoutUnit position="center">
+                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                    
+                    <h:panelGrid id="grid" columns="3" cellpadding="2">
+                        <p:outputLabel for="codigo" value="Codigo Item:" style="font-weight:bold"/>                    
+                        <p:inputText id="codigo" value="#{AlquilerItems.codigo}" required="true" label="Codigo"/>
+                        <p:message for="codigo" />
+ 
+                        <p:outputLabel for="dias" value="Dias Prestamo:" style="font-weight:bold"/>                    
+                        <p:inputText id="dias" value="#{AlquilerItems.dias}" required="true" label="Dias"/>
+                        <p:message for="dias" />
+                    </h:panelGrid>
+                    <p:commandButton value="Agregar" actionListener="#{AlquilerItems.calcularCostoAlquiler()}" oncomplete="if (#{AlquilerItems.conditionFlag}) { PF('confirm').show() }" update="@this, :RegistroAlquiler:confirmPrestamo"/>
+                    
+                    <p:dialog header="Confirmacion" widgetVar="confirm" height="150" width="300" showEffect="fade" hideEffect="fade" resizable="false">
+                        <p:outputPanel id="confirmPrestamo" style="text-align:center;">
+                            <p:panelGrid  columns="2">
+                                <h:outputLabel value="Costo Prestamo :"/>
+                                <h:outputText value="#{AlquilerItems.costoAlquiler}" />
+                            </p:panelGrid>
+                            <p:commandButton update="RegistroAlquiler" value="Yes" icon="ui-icon-check" actionListener="#{AlquilerItems.agregarAlquiler()}"/>
+                            <p:commandButton update="RegistroAlquiler" value="No" icon="ui-icon-close"/>
+                        </p:outputPanel>
+                    </p:dialog>
+                </p:layoutUnit>
+            </p:layout>            
+        </h:form>
+    </h:body>
 
-                          <p:outputLabel for="telefono" value="Telefono:" />
-                          <p:inputText  id="telefono" value="#{AlquilerItems.nuevoCliente.telefono}" label="Telefono"></p:inputText>
-
-                          <p:outputLabel for="direccion" value="Direccion:" />
-                          <p:inputText  id="direccion" value="#{AlquilerItems.nuevoCliente.direccion}" label="Direccion"></p:inputText>
-
-                          <p:outputLabel for="email" value="Email:" />
-                          <p:inputText  id="email" value="#{AlquilerItems.nuevoCliente.email}" label="Email"></p:inputText>
-                      </h:panelGrid>
-                  </p:panel>
-                  <p:commandButton value="Registrar cliente" update="Clientes" actionListener="#{AlquilerItems.registrarNuevoCliente}" />
-                  <br/><br/>
-                  <p:commandButton type="submit" value="Seleccionar cliente"  update="Clientes" action="RegistroClienteItem" />
-              </p:layoutUnit>
-          </p:layout>
-      </h:form>
-  </h:body>
 </html>
