@@ -15,6 +15,8 @@ import edu.eci.cvds.samples.entities.TipoItem;
 import edu.eci.cvds.samples.services.ExcepcionServiciosAlquiler;
 import edu.eci.cvds.samples.services.ServiciosAlquiler;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Singleton
@@ -22,12 +24,20 @@ public class ServiciosAlquilerImpl implements ServiciosAlquiler {
 
    @Inject
    private ItemDAO itemDAO;
+   @Inject
    private ClienteDAO clienteDAO;
+   @Inject
    private TipoItemDAO tipoItemDAO;
 
    @Override
    public int valorMultaRetrasoxDia(int itemId) {
-       throw new UnsupportedOperationException("Not supported yet.");
+	   
+	   try {
+		   return itemDAO.valorMultaRetrasoxDia(itemId);
+	   
+	   }catch (PersistenceException ex) {
+           throw new UnsupportedOperationException("Error al consultar la multa del  item con el id"+itemId);
+       }
    }
 
    @Override
@@ -70,7 +80,6 @@ public class ServiciosAlquilerImpl implements ServiciosAlquiler {
            throw new ExcepcionServiciosAlquiler("Error al consultar el item con el id"+id,ex);
        }
    }
-   //no hacer
    @Override
    public List<Item> consultarItemsDisponibles(){
 	   try {
@@ -82,9 +91,13 @@ public class ServiciosAlquilerImpl implements ServiciosAlquiler {
    }
    
    @Override
-   public long consultarMultaAlquiler(int iditem, Date fechaDevolucion) throws ExcepcionServiciosAlquiler {
-       throw new UnsupportedOperationException("Not supported yet.");
+   public long consultarMultaAlquiler(ItemRentado iditem, Date fechaDevolucion) throws ExcepcionServiciosAlquiler {
+       LocalDate fechaMinimaEntrega=iditem.getFechafinrenta().toLocalDate();
+       LocalDate fechaEntrega=fechaDevolucion.toLocalDate();
+       long diasRetraso = ChronoUnit.DAYS.between(fechaMinimaEntrega, fechaEntrega);
+       return diasRetraso*valorMultaRetrasoxDia(iditem.getId());
    }
+   
 
    @Override
    public TipoItem consultarTipoItem(int id) throws ExcepcionServiciosAlquiler {
@@ -108,27 +121,48 @@ public class ServiciosAlquilerImpl implements ServiciosAlquiler {
    
    @Override
    public void registrarAlquilerCliente(Date date, long docu, Item item, int numdias) throws ExcepcionServiciosAlquiler {
-       throw new UnsupportedOperationException("Not supported yet.");
+	   try {
+			LocalDate rentoHoy = LocalDate.parse(date.toString());
+			LocalDate entregar = rentoHoy.plusDays(numdias);
+			Date date2 = java.sql.Date.valueOf(entregar);
+			int itemId = item.getId();
+			clienteDAO.agregarItemRentadoACliente((int)docu,itemId,date,date2);
+		}catch(PersistenceException e) {
+			throw new ExcepcionServiciosAlquiler("no se puede registrar el item."+item.getId(),e);
+		}
+
    }
 
    @Override
    public void registrarCliente(Cliente c) throws ExcepcionServiciosAlquiler {
-       throw new UnsupportedOperationException("Not supported yet.");
+       try {
+    	   clienteDAO.saveCliente(c);;
+       }catch(PersistenceException e) {
+			throw new ExcepcionServiciosAlquiler("no se puede registrar el cliente."+c.getNombre(),e);
+		}
    }
 
    @Override
    public long consultarCostoAlquiler(int iditem, int numdias) throws ExcepcionServiciosAlquiler {
-       throw new UnsupportedOperationException("Not supported yet.");
+       try {
+    	   return itemDAO.consultarCostoAlquiler(iditem, numdias);
+    	   
+       }catch(PersistenceException e) {
+			throw new ExcepcionServiciosAlquiler("no se puede consultar el costo de alquiler."+iditem,e);
+		}
    }
    //no hacer
    @Override
    public void actualizarTarifaItem(int id, long tarifa) throws ExcepcionServiciosAlquiler {
        throw new UnsupportedOperationException("Not supported yet.");
    }
-   //no hacer
    @Override
    public void registrarItem(Item i) throws ExcepcionServiciosAlquiler {
-       throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	   try {
+		   itemDAO.save(i);;
+       }catch(PersistenceException e) {
+			throw new ExcepcionServiciosAlquiler("no se puede registrar el item. con id"+i.getId(),e);
+		}
    }
    //no hacer
    @Override

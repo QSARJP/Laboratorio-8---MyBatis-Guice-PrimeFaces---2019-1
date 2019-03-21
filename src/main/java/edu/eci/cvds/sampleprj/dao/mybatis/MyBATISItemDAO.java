@@ -53,5 +53,27 @@ public class MyBATISItemDAO implements ItemDAO{
 	
 	
 	  }
+	  
+	  @Override
+	  public int valorMultaRetrasoxDia(int id) throws PersistenceException {
+	  try{
+	      return itemMapper.valorMultaRetrasoxDia(id);
+	  }
+	  catch(org.apache.ibatis.exceptions.PersistenceException e){
+	      throw new PersistenceException("Error al consultar el items disponibles ",e);
+	  }
+	
+	
+	  }
+	  @Override
+	  public long consultarCostoAlquiler(int iditem, int numdias)throws PersistenceException {
+			try {
+				return itemMapper.consultarCostoAlquiler(iditem, numdias);
+			}catch(org.apache.ibatis.exceptions.PersistenceException e) {
+				throw new PersistenceException("Error al consultar costo alquiler de Item o Item inexistente" + e);
+			}
+		}
+	  
+	  
 
   }

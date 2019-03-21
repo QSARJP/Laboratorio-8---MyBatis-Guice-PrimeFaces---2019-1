@@ -58,6 +58,16 @@
 
 </insert>
 
+<select parameterType="map" id="consultarMultaPorDia" resultType='long'>
+		SELECT tarifaxdia FROM VI_ITEMS
+		WHERE id = #{id}
+</select>
+
+<select parameterType="map" id="consultarCostoAlquiler" resultType='Long'>
+		SELECT tarifaxdia*#{dias} FROM VI_ITEMS
+		WHERE id = #{id}
+</select>
+
 
 <resultMap type='Item' id='ItemResult'>
     <id property='id' column='idItem'/>

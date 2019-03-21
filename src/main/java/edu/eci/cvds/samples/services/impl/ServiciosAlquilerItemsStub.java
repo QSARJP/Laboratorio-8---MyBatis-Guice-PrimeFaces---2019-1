@@ -175,12 +175,12 @@ public class ServiciosAlquilerItemsStub implements ServiciosAlquiler {
    }
 
    @Override
-   public long consultarMultaAlquiler(int iditem,Date fechaDevolucion) throws ExcepcionServiciosAlquiler{
-       if (!itemsrentados.containsKey(iditem)){
+   public long consultarMultaAlquiler(ItemRentado iditem,Date fechaDevolucion) throws ExcepcionServiciosAlquiler{
+       if (!itemsrentados.containsKey(iditem.getId())){
            throw new ExcepcionServiciosAlquiler("El item "+iditem+"no esta en alquiler");
        }
        else{
-           ItemRentado ir=itemsrentados.get(iditem);
+           ItemRentado ir=iditem;
 
            LocalDate fechaMinimaEntrega=ir.getFechafinrenta().toLocalDate();
            LocalDate fechaEntrega=fechaDevolucion.toLocalDate();

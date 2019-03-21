@@ -23,6 +23,10 @@ public interface ItemMapper {
     public Item consultarItem(@Param("iid")int id);
     
     public void insertarItem(@Param("iitem")Item it);
+    
+    public int valorMultaRetrasoxDia(@Param("iid")int id);
+    
+    public long consultarCostoAlquiler(@Param("id")int iditem,@Param("dias") int numdias);
 
         
 }
