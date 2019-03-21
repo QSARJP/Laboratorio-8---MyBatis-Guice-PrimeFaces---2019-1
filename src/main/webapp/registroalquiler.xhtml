@@ -1,56 +1,46 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3c.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h:head></h:head>
-
+      xmlns:p="http://primefaces.org/ui" 
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head><title>Items del cliente</title></h:head>
     <h:body>
-        <h:form id="RegistroAlquiler">
-            <p:layout>
-                <p:layoutUnit position="west" resizable="true" size="700">
-                    <h1>Cliente : #{AlquilerItems.cliente.nombre}</h1>
-                    <p:dataTable id="ItemsRentados" var="itemRentado" value="#{AlquilerItems.cliente.rentados}">
-                        <f:facet name="header">
-                            Items Rentados
-                        </f:facet>
-                        <p:column headerText="Item">
-                            <h:outputText value="#{itemRentado.item.nombre}"/>
-                        </p:column>
-                        <p:column headerText="Multa">
-                            <h:outputText value="#{AlquilerItems.consultarMulta(itemRentado.item.id, AlquilerItems.fechaActual)}">
-                                <f:convertNumber currencySymbol="$" type="currency"/>
-                            </h:outputText>
-                        </p:column>
-                    </p:dataTable>
-                </p:layoutUnit>
-                    
-                <p:layoutUnit position="center">
-                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                    
-                    <h:panelGrid id="grid" columns="3" cellpadding="2">
-                        <p:outputLabel for="codigo" value="Codigo Item:" style="font-weight:bold"/>                    
-                        <p:inputText id="codigo" value="#{AlquilerItems.codigo}" required="true" label="Codigo"/>
-                        <p:message for="codigo" />
- 
-                        <p:outputLabel for="dias" value="Dias Prestamo:" style="font-weight:bold"/>                    
-                        <p:inputText id="dias" value="#{AlquilerItems.dias}" required="true" label="Dias"/>
-                        <p:message for="dias" />
-                    </h:panelGrid>
-                    <p:commandButton value="Agregar" actionListener="#{AlquilerItems.calcularCostoAlquiler()}" oncomplete="if (#{AlquilerItems.conditionFlag}) { PF('confirm').show() }" update="@this, :RegistroAlquiler:confirmPrestamo"/>
-                    
-                    <p:dialog header="Confirmacion" widgetVar="confirm" height="150" width="300" showEffect="fade" hideEffect="fade" resizable="false">
-                        <p:outputPanel id="confirmPrestamo" style="text-align:center;">
-                            <p:panelGrid  columns="2">
-                                <h:outputLabel value="Costo Prestamo :"/>
-                                <h:outputText value="#{AlquilerItems.costoAlquiler}" />
-                            </p:panelGrid>
-                            <p:commandButton update="RegistroAlquiler" value="Yes" icon="ui-icon-check" actionListener="#{AlquilerItems.agregarAlquiler()}"/>
-                            <p:commandButton update="RegistroAlquiler" value="No" icon="ui-icon-close"/>
-                        </p:outputPanel>
-                    </p:dialog>
-                </p:layoutUnit>
-            </p:layout>            
-        </h:form>
-    </h:body>
+       
+        
+        <h1>Items Rentados cliente</h1>
+         <f:metadata>
+	    <f:viewParam name="documento" value="#{registroAlquilerBean.documento}" />
+	</f:metadata>
+        <p:dataTable id="itemRemtado_table" var="itemRemtado" value="#{registroAlquilerBean.data}">
+            <p:column headerText="Id Item Remtado">
+                <h:outputText value="#{itemRemtado.id}" />
+            </p:column>
+            <p:column headerText="Nombre Item">
+                <h:outputText value="#{itemRemtado.item.nombre}" />
+            </p:column>
+            <p:column headerText="Inicio de la renta">
+                <h:outputText value="#{itemRemtado.fechainiciorenta}" />
+            </p:column>
+            <p:column headerText="Fin de la renta">
+                <h:outputText value="#{itemRemtado.fechafinrenta}" />
+            </p:column>
+        </p:dataTable>
 
+        <br></br>
+        <h1>Registrar Item a Rentar</h1>
+
+        <br></br>
+    
+        <h:form>
+            <p:outputLabel>Dijite el id del item a rentar </p:outputLabel>
+            <h:inputText binding="#{item}" />
+            <p:outputLabel>Dijite numero de dias, </p:outputLabel>
+            <h:inputText binding="#{numdias}" />
+            <br><p:outputLabel id='costoAlquiler' value="#{registroAlquilerBean.costo}"> Costo del alquiler</p:outputLabel></br>
+            <p:commandButton value="Costo Alquiler" update='costoAlquiler' actionListener="#{registroAlquilerBean.costoAlquiler(item.value, numdias.value)}"></p:commandButton>
+            <p:commandButton value="Registrar" update="itemRemtado_table" actionListener="#{registroAlquilerBean.registroAlquiler(item.value, numdias.value)}"></p:commandButton>
+            
+            
+        </h:form>  
+    </h:body>
 </html>
