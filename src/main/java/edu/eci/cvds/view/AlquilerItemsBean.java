@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 import com.google.inject.Inject;
 
@@ -17,7 +18,7 @@ import edu.eci.cvds.samples.services.ExcepcionServiciosAlquiler;
 import edu.eci.cvds.samples.services.ServiciosAlquiler;
 
 @ManagedBean(name = "AlquilerItems")
-@ApplicationScoped
+@SessionScoped
 public class AlquilerItemsBean extends BasePageBean {
 	
 	@Inject
