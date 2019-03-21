@@ -3,6 +3,8 @@ package edu.eci.cvds.sampleprj.dao.mybatis;
 import java.util.Date;
 import java.util.List;
 
+import org.mybatis.guice.transactional.Transactional;
+
 import com.google.inject.Inject;
 
 import edu.eci.cvds.sampleprj.dao.ClienteDAO;
@@ -51,6 +53,7 @@ public class MyBATISClienteDAO implements ClienteDAO{
 	  }
 	  
 	  @Override
+	  @Transactional
 	  public void agregarItemRentadoACliente(int documento,int idit,Date fechainicio,Date fechafin) throws PersistenceException {
 	  try{
 	       clienteMapper.agregarItemRentadoACliente(documento, idit, fechainicio, fechafin);
