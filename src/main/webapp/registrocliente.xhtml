@@ -1,56 +1,62 @@
- <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3c.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h:head></h:head>
-
+      xmlns:p="http://primefaces.org/ui" 
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head><title>Items del cliente</title></h:head>
     <h:body>
-        <h:form id="RegistroAlquiler">
-            <p:layout>
-                <p:layoutUnit position="west" resizable="true" size="700">
-                    <h1>Cliente : #{AlquilerItems.cliente.nombre}</h1>
-                    <p:dataTable id="ItemsRentados" var="itemRentado" value="#{AlquilerItems.cliente.rentados}">
-                        <f:facet name="header">
-                            Items Rentados
-                        </f:facet>
-                        <p:column headerText="Item">
-                            <h:outputText value="#{itemRentado.item.nombre}"/>
+        <h:form id="ItemsClientes">
+            <p:layout style="min-width:800px;min-height:900px;">
+                <p:layoutUnit resizable="true" position="center" header="Lista de Items en alquiler del cliente seleccionado">
+                    <p:dataTable id="TablaItems" var="Items"  value="#{AlquilerItems.consultarItemsCliente}">
+
+                        <p:column headerText="ID item">
+                            <h:outputText value="#{Items.item.id}"/>
                         </p:column>
-                        <p:column headerText="Multa">
-                            <h:outputText value="#{AlquilerItems.consultarMulta(itemRentado.item.id, AlquilerItems.fechaActual)}">
-                                <f:convertNumber currencySymbol="$" type="currency"/>
-                            </h:outputText>
+                        <p:column headerText="Nombre Item">
+                            <h:outputText value="#{Items.item.nombre}"/>
+                        </p:column>
+
+                        <p:column headerText="Fecha inicio de renta">
+                            <h:outputText value="#{Items.fechainiciorenta }"/>
+                        </p:column>
+
+                        <p:column headerText="Fecha fin de renta">
+                            <h:outputText value="#{Items.fechafinrenta}"/>
+                        </p:column>
+
+                        <p:column headerText="Tarifa X dia">
+                            <h:outputText value="#{Items.item.tarifaxDia }"/>
                         </p:column>
                     </p:dataTable>
-                </p:layoutUnit>
-                    
-                <p:layoutUnit position="center">
-                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                    
-                    <h:panelGrid id="grid" columns="3" cellpadding="2">
-                        <p:outputLabel for="codigo" value="Codigo Item:" style="font-weight:bold"/>                    
-                        <p:inputText id="codigo" value="#{AlquilerItems.codigo}" required="true" label="Codigo"/>
-                        <p:message for="codigo" />
- 
-                        <p:outputLabel for="dias" value="Dias Prestamo:" style="font-weight:bold"/>                    
-                        <p:inputText id="dias" value="#{AlquilerItems.dias}" required="true" label="Dias"/>
-                        <p:message for="dias" />
+                    <br/>
+                    <h:outputText value="Multa: #{AlquilerItems.consultarMultaAlquiler}" />
+                    <br/>                   
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <p:outputLabel for="codigo" value="Codigo de item:" />
+                        <p:inputText  id="codigo" value="#{AlquilerItems.codigoBarras}" label="Codigo"></p:inputText>
+
+                        <p:outputLabel for="diasAlquiler" value="Dias de alquiler:" />
+                        <p:inputText  id="diasAlquiler" value="#{AlquilerItems.dias}" label="Dias de alquiler"></p:inputText>
+
+                        <p:commandButton value="Consultar costo " update="costo" actionListener="#{AlquilerItems.consultarCostoAlquiler}" />
+                        <p:outputLabel id="costo" value="   #{AlquilerItems.costo} " />
+                        <br/>
                     </h:panelGrid>
-                    <p:commandButton value="Agregar" actionListener="#{AlquilerItems.calcularCostoAlquiler()}" oncomplete="if (#{AlquilerItems.conditionFlag}) { PF('confirm').show() }" update="@this, :RegistroAlquiler:confirmPrestamo"/>
-                    
-                    <p:dialog header="Confirmacion" widgetVar="confirm" height="150" width="300" showEffect="fade" hideEffect="fade" resizable="false">
-                        <p:outputPanel id="confirmPrestamo" style="text-align:center;">
-                            <p:panelGrid  columns="2">
-                                <h:outputLabel value="Costo Prestamo :"/>
-                                <h:outputText value="#{AlquilerItems.costoAlquiler}" />
-                            </p:panelGrid>
-                            <p:commandButton update="RegistroAlquiler" value="Yes" icon="ui-icon-check" actionListener="#{AlquilerItems.agregarAlquiler()}"/>
-                            <p:commandButton update="RegistroAlquiler" value="No" icon="ui-icon-close"/>
-                        </p:outputPanel>
-                    </p:dialog>
+                    <p:commandButton value="Registrar nuevo alquiler" update="ItemsClientes" actionListener="#{AlquilerItems.registrarAlquiler}" />
+
                 </p:layoutUnit>
-            </p:layout>            
+                <p:layoutUnit resizable="true" position="south" header="Registrar nuevo Alquiler" size="400">
+                    <p:panel id="panelAlquiler" header="Item rentado">
+                        <p:dataTable id="ItemsD" var="ItemD"  value="#{AlquilerItems.consultarItemsDisponibles}">
+                            <p:column headerText="ID Items Disponibles">
+                                <h:outputText value="#{ItemD.id}"/>
+                            </p:column>
+                        </p:dataTable>                                         
+                    </p:panel>               
+                </p:layoutUnit>                 
+            </p:layout>
+            <p:commandButton type="submit" value="Volver a registro de clientes"  update="ItemsClientes" action="RegistroClientes" />  
         </h:form>
     </h:body>
-
 </html>
