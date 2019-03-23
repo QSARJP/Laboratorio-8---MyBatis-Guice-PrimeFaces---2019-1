@@ -21,4 +21,7 @@
     <welcome-file-list>
         <welcome-file>faces/registrocliente.xhtml</welcome-file>
     </welcome-file-list>
+    <listener>
+	    <listener-class>edu.eci.cvds.guice.GuiceContextListener</listener-class>
+	</listener>
 </web-app>

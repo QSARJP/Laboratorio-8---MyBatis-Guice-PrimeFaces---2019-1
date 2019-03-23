@@ -58,27 +58,30 @@
 	     	WHERE c.documento = #{idcli} 
 </select>
 
-<select parameterType="map" id="consultarItemsClientes" resultMap="ItemResult">
-	select 
-	    c.nombre AS nombreCliente,
-	    c.documento,
-	    c.telefono,
-	    c.direccion,
-	    c.email,
-	    c.vetado,
-	    ir.id AS idItemRentado ,
-	    ir.fechainiciorenta ,
-	    ir.fechafinrenta ,
-	    i.id AS idItem,
-	    i.nombre AS nombreItem ,
-	    i.descripcion AS itemDescripcion ,
-	    i.fechalanzamiento ,
-	    i.tarifaxdia ,
-	    i.formatorenta ,
-	    i.genero 
-    FROM VI_CLIENTES as c 
-	    left join VI_ITEMRENTADO as ir on c.documento=ir.CLIENTES_documento 
-	    left join VI_ITEMS as i on ir.ITEMS_id=i.id 
+<select parameterType="map" id="consultarItemsCliente" resultMap="edu.eci.cvds.sampleprj.dao.mybatis.mappers.ItemRentadoMapper.ItemRentadoResult">
+	select
+                
+        ir.id,
+        ir.fechainiciorenta ,
+        ir.fechafinrenta,
+    
+        i.id as I_id,
+        i.nombre as I_nombre,
+        i.descripcion as I_descripcion,
+        i.fechaLanzamiento as I_fechaLanzamiento,
+        i.tarifaxdia as I_tarifaxdia,
+        i.formatorenta as I_formatorenta,
+        i.genero as I_genero,        
+         
+        ti.id as I_TI_id,
+        ti.descripcion as I_TI_descripcion 
+
+    
+        FROM VI_CLIENTES as c 
+        left join VI_ITEMRENTADO as ir on c.documento=ir.CLIENTES_documento 
+        left join VI_ITEMS as i on ir.ITEMS_id=i.id 
+        left join VI_TIPOITEM as ti on i.TIPOITEM_id=ti.id 
+        WHERE ir.CLIENTES_documento=#{idcli} and ir.ITEMS_id=i.id; 
 </select>
 
 
@@ -91,7 +94,7 @@
 
 <insert id="agregarCliente" parameterType = "map">
 
-	INSERT INTO VI_CLIENTES (documento,nombre,telefono,direccion,email,vetado) VALUES (#{cliente.doc},#{cliente.nombre},#{cliente.telefono},#{cliente.direccion},#{cliente.email},#{cliente.vetado})
+	INSERT INTO VI_CLIENTES (documento,nombre,telefono,direccion,email,vetado) VALUES (#{cliente.documento},#{cliente.nombre},#{cliente.telefono},#{cliente.direccion},#{cliente.email},#{cliente.vetado})
 
 </insert>
           
@@ -102,7 +105,7 @@
     <result property='direccion' column='direccion'/>
     <result property='email' column='email'/>
     <result property='vetado' column='vetado'/>      
-    <collection property='rentados' ofType='ItemRentado'  resultMap = 'edu.eci.cvds.sampleprj.dao.mybatis.mappers.ItemRentadoMapper.ItemRentadoResult' ></collection>
+    <collection property='rentados' ofType='ItemRentado' columnPrefix='IR_' resultMap = 'edu.eci.cvds.sampleprj.dao.mybatis.mappers.ItemRentadoMapper.ItemRentadoResult' ></collection>
 </resultMap>	
 
 </mapper> 

@@ -1,0 +1,11 @@
+Integrantes:
+
+Juan pablo ospina henao
+Luis jaramillo
+
+
+git 
+https://github.com/QSARJP/Laboratorio-8---MyBatis-Guice-PrimeFaces---2019-1
+
+Heroku
+https://serviciosalquiler.herokuapp.com
