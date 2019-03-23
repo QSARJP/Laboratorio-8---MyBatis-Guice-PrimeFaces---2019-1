@@ -5,30 +5,40 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head><title>Items del cliente</title></h:head>
     <h:body>
-        <h:form id="ItemsClientes">
-            <p:layout style="min-width:800px;min-height:900px;">
-                <p:layoutUnit resizable="true" position="center" header="Lista de Items en alquiler del cliente seleccionado">
-                    <p:dataTable id="TablaItems" var="Items"  value="#{alquilerBean.items}">
+       
+        
+        <h1>Items Rentados cliente</h1>
+         <f:metadata>
+	    <f:viewParam name="documento" value="#{alquilerBean.documento}" />
+		</f:metadata>
+        <p:dataTable id="itemRemtado_table" var="itemRemtado" value="#{alquilerBeans.items}">
+            <p:column headerText="Id Item Remtado">
+                <h:outputText value="#{itemRemtado.id}" />
+            </p:column>
+            <p:column headerText="Nombre Item">
+                <h:outputText value="#{itemRemtado.item.nombre}" />
+            </p:column>
+            <p:column headerText="Inicio de la renta">
+                <h:outputText value="#{itemRemtado.fechainiciorenta}" />
+            </p:column>
+            <p:column headerText="Fin de la renta">
+                <h:outputText value="#{itemRemtado.fechafinrenta}" />
+            </p:column>
+        </p:dataTable>
 
-                        <p:column headerText="ID item">
-                            <h:outputText value="#{Items.item.id}"/>
-                        </p:column>
-                        <p:column headerText="Nombre Item">
-                            <h:outputText value="#{Items.item.nombre}"/>
-                        </p:column>
+        <br></br>
+        <h1>Registrar Item a Rentar</h1>
 
-                        <p:column headerText="Fecha inicio de renta">
-                            <h:outputText value="#{Items.fechainiciorenta }"/>
-                        </p:column>
+        <br></br>
+    
+        <h:form>
+            <p:outputLabel>Dijite el id del item a rentar </p:outputLabel>
+            <h:inputText binding="#{item}" />
+            <p:outputLabel>Dijite numero de dias, </p:outputLabel>
+            <h:inputText binding="#{numdias}" />
+            <br><p:outputLabel id='costoAlquiler' value="#{alquilerBean.costo}"> Costo del alquiler</p:outputLabel></br>
 
-                        <p:column headerText="Fecha fin de renta">
-                            <h:outputText value="#{Items.fechafinrenta}"/>
-                        </p:column>
-
-                        <p:column headerText="Tarifa X dia">
-                            <h:outputText value="#{Items.item.tarifaxDia }"/>
-                        </p:column>
-                    </p:dataTable>
-        </h:form>
+            
+        </h:form>  
     </h:body>
 </html>
